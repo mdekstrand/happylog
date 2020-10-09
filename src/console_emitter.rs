@@ -29,7 +29,7 @@ pub trait Println {
   fn println(&self, text: &str) -> io::Result<()>;
 }
 
-/// Progress bar logging context
+/// Context for managing the scope of a progress bar logging target.
 pub struct LogPBState<'a> {
   phantom: PhantomData<&'a str>,
   previous: Target
@@ -76,6 +76,22 @@ pub fn initialize(level: LevelFilter) -> Result<(), SetLoggerError> {
   Ok(())
 }
 
+/// Set a progress bar that console log messages should be written to.
+/// 
+/// The `indicatif` progress bar facilities take over the terminal.
+/// Writing log messages directly to `stderr` while a progress bar is active is
+/// likely to result in corrupt output.  This function sets up the logging
+/// system to write to a progress bar's `println` method.  It returns an object
+/// that, when dropped, unsets the saved progress bar target.
+/// 
+/// Example:
+/// 
+/// ```
+/// let _pbs = happylog::set_progress(&pb);
+/// # lots of operations
+/// pb.finish_and_clear()
+/// # let _pbs go out of scope
+/// ```
 pub fn set_progress<'a>(pb: &'a ProgressBar) -> LogPBState<'a> {
   let pbb = Box::new(Target::PB(pb.clone()));
   let prev = get_target();

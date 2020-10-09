@@ -9,3 +9,4 @@ pub mod args;
 
 pub use console_emitter::initialize;
 pub use console_emitter::set_progress;
+pub use console_emitter::LogPBState;
