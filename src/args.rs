@@ -1,5 +1,6 @@
 use structopt::StructOpt;
-use log::SetLoggerError;
+use log::{SetLoggerError, LevelFilter};
+use crate::util::verbosify;
 
 /// Command line options for configuring the logger with StructOpt.
 /// 
@@ -36,6 +37,6 @@ impl LogOpts {
     for _i in 0..self.verbose {
       level = verbosify(level);
     }
-    crate::console_emitter::init(level)
+    crate::console_emitter::initialize(level)
   }
 }
