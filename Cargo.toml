@@ -2,8 +2,14 @@
 name = "happylog"
 version = "0.1.0"
 authors = ["Michael Ekstrand <michaelekstrand@boisestate.edu>"]
+homepage = "https://github.com/mdekstrand/happylog"
+repository = "https://github.com/mdekstrand/happylog.git"
+keywords = ["logging", "console"]
+categories = ["command-line-interface"]
 edition = "2018"
 license = "MIT"
+readme = "README.md"
+description = "Simple logging backend for command-line utilities"
 
 [features]
 default = ["structopt"]
