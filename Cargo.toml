@@ -1,0 +1,15 @@
+[package]
+name = "happylog"
+version = "0.1.0"
+authors = ["Michael Ekstrand <michaelekstrand@boisestate.edu>"]
+edition = "2018"
+license = "MIT"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+log = { version = "^0.4.8", features = ["std"] }
+indicatif = ">=0.11"
+console = "*"
+
+structopt = { version = ">= 0.2", optional = true }
