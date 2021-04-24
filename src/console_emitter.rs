@@ -4,7 +4,6 @@ use log::*;
 use std::io;
 use std::sync::atomic::{AtomicPtr, Ordering};
 use std::ptr;
-use std::marker::PhantomData;
 
 static LOG_OUT: AtomicPtr<Target> = AtomicPtr::new(ptr::null_mut());
 
@@ -30,8 +29,7 @@ pub trait Println {
 }
 
 /// Context for managing the scope of a progress bar logging target.
-pub struct LogPBState<'a> {
-  phantom: PhantomData<&'a str>,
+pub struct LogPBState {
   previous: Target
 }
 
@@ -92,17 +90,16 @@ pub fn initialize(level: LevelFilter) -> Result<(), SetLoggerError> {
 /// pb.finish_and_clear()
 /// # let _pbs go out of scope
 /// ```
-pub fn set_progress<'a>(pb: &'a ProgressBar) -> LogPBState<'a> {
+pub fn set_progress(pb: &ProgressBar) -> LogPBState {
   let pbb = Box::new(Target::PB(pb.clone()));
   let prev = get_target();
   LOG_OUT.store(Box::leak(pbb), Ordering::Relaxed);
   LogPBState {
-    phantom: PhantomData,
     previous: prev
   }
 }
 
-impl <'a> Drop for LogPBState<'a> {
+impl Drop for LogPBState {
   fn drop(&mut self) {
     let pbox = Box::new(self.previous.clone());
     LOG_OUT.store(Box::leak(pbox), Ordering::Relaxed);
