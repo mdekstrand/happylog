@@ -2,21 +2,24 @@ use structopt::StructOpt;
 use log::{SetLoggerError, LevelFilter};
 use crate::util::verbosify;
 
-/// Command line options for configuring the logger with StructOpt.
-/// 
-/// It's recommended to use this in your program like this:
-/// 
-/// ```
-/// #[derive(StructOpt, Debug)]
-/// #[structopt(name="command")]
-/// struct Command {
-///   #[structopt(flatten)]
-///   logging: LogOpts
-/// }
-/// ```
-/// 
-/// In your `main`, you can then call `opts.logging.init()` to initialize 
-/// the logging framework.
+#[cfg_attr(not(doc), allow(missing_docs))]
+#[cfg_attr(doc, doc=r#"
+Command line options for configuring the logger with StructOpt.
+
+It's recommended to use this in your program like this:
+
+```
+#[derive(StructOpt, Debug)]
+#[structopt(name="command")]
+struct Command {
+  #[structopt(flatten)]
+  logging: LogOpts
+}
+```
+
+In your `main`, you can then call `opts.logging.init()` to initialize 
+the logging framework.
+"#)]
 #[derive(StructOpt, Debug)]
 pub struct LogOpts {
   /// Verbose mode (-v, -vv, -vvv, etc.)
