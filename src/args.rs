@@ -1,3 +1,4 @@
+//! Support for command-line argument configuration of the logger.
 use structopt::StructOpt;
 use log::{SetLoggerError, LevelFilter};
 use crate::util::verbosify;

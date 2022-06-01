@@ -1,12 +1,12 @@
+//! Easy CLI progress-enabled logging support.
 mod console_emitter;
 
-/// Utility functions for working with loggers
 pub mod util;
+pub mod target;
 
-/// Support for command-line argument configuration of the logger.
 #[cfg(feature="structopt")]
 pub mod args;
 
 pub use console_emitter::initialize;
-pub use console_emitter::set_progress;
-pub use console_emitter::LogPBState;
+pub use console_emitter::push_target;
+pub use console_emitter::LogState;

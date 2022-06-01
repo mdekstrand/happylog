@@ -1,3 +1,4 @@
+//! Utility functions for working with loggers
 use log::LevelFilter;
 
 /// Make a log level more verbose by one step

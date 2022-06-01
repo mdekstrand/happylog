@@ -1,22 +1,19 @@
-use indicatif::ProgressBar;
+use indicatif::{ProgressBar, MultiProgress};
 use log::*;
 
 use std::io;
 use std::sync::atomic::{AtomicPtr, Ordering};
 use std::ptr;
 
+use crate::target::LogTarget;
+
 static LOG_OUT: AtomicPtr<Target> = AtomicPtr::new(ptr::null_mut());
 
-#[derive(Debug, Clone)]
-enum Target {
-  Stderr,
-  PB(ProgressBar)
-}
 
-fn get_target() -> Target {
+fn get_target() -> impl LogTarget {
   let out = LOG_OUT.load(Ordering::Relaxed);
   let rout = if out.is_null() {
-    &Target::Stderr
+    io::stderr()
   } else {
     unsafe { &*out }
   };
@@ -29,7 +26,7 @@ pub trait Println {
 }
 
 /// Context for managing the scope of a progress bar logging target.
-pub struct LogPBState {
+pub struct LogState {
   previous: Target
 }
 
@@ -54,6 +51,9 @@ impl Log for LogEnv {
         },
         Target::PB(ref prog) => {
           prog.println(msg);
+        },
+        Target::MPB(ref mpb) => {
+          mpb.println(msg);
         }
       }
     }
@@ -74,32 +74,31 @@ pub fn initialize(level: LevelFilter) -> Result<(), SetLoggerError> {
   Ok(())
 }
 
-/// Set a progress bar that console log messages should be written to.
+/// Set a target such as a progress bar, overriding the previou target.
 /// 
-/// The `indicatif` progress bar facilities take over the terminal.
-/// Writing log messages directly to `stderr` while a progress bar is active is
-/// likely to result in corrupt output.  This function sets up the logging
-/// system to write to a progress bar's `println` method.  It returns an object
-/// that, when dropped, unsets the saved progress bar target.
+/// This is used to support things such as redirecting logging output to an
+/// [indicatif] progress bar to coordinate logging and progress output. This
+/// function sets up the logging system to write to the specified target.  It
+/// returns an object that, when dropped, unsets the saved progress bar target.
 /// 
 /// Example:
 /// 
 /// ```
-/// let _pbs = happylog::set_progress(&pb);
+/// let _pbs = happylog::push_target(&pb);
 /// # lots of operations
 /// pb.finish_and_clear()
 /// # let _pbs go out of scope
 /// ```
-pub fn set_progress(pb: &ProgressBar) -> LogPBState {
-  let pbb = Box::new(Target::PB(pb.clone()));
+pub fn push_target<T: Into<Target>>(tgt: T) -> LogState {
+  let pbb = Box::new(tgt.into());
   let prev = get_target();
   LOG_OUT.store(Box::leak(pbb), Ordering::Relaxed);
-  LogPBState {
+  LogState {
     previous: prev
   }
 }
 
-impl Drop for LogPBState {
+impl Drop for LogState {
   fn drop(&mut self) {
     let pbox = Box::new(self.previous.clone());
     LOG_OUT.store(Box::leak(pbox), Ordering::Relaxed);
