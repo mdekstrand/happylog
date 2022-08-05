@@ -14,15 +14,21 @@ use log::*;
 use happylog::*;
 
 fn main() -> () {
-    initialize(LevelFilter::Info).unwrap();
+    initialize(0).unwrap();
     info!("info logging message");
 }
 ```
 
+## Major Changes
+
+In 0.3, Happylog changed to use Fern instead of its own log target.  It will
+eventually expose Fern dispatchers to allow for more thorough log configuration.
+
 ## Acknowledgements
 
-Copyright &copy; 2020 Boise State University.  Distributed under the MIT License; see LICENSE.md.
-This material is based upon work supported by the National Science Foundation under
-Grant No. IIS 17-51278. Any opinions, findings, and conclusions or recommendations
-expressed in this material are those of the author(s) and do not necessarily reflect
-the views of the National Science Foundation.
+Copyright &copy; 2020–2022 Boise State University.  Distributed under the MIT
+License; see LICENSE.md. This material is based upon work supported by the
+National Science Foundation under Grant No. IIS 17-51278. Any opinions,
+findings, and conclusions or recommendations expressed in this material are
+those of the author(s) and do not necessarily reflect the views of the National
+Science Foundation.
