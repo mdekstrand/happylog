@@ -13,6 +13,12 @@ mod verbosity;
 
 #[cfg(feature="structopt")]
 pub mod args;
+#[cfg(feature="structopt")]
+pub use args::LogOpts;
+
+pub use progress::add_progress;
+pub use progress::new_progress;
+pub use progress::new_spinner;
 
 pub fn initialize(verbose: i32) -> Result<(), SetLoggerError> {
   let mut verb = Verbosity::default();

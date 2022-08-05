@@ -1,4 +1,4 @@
-use indicatif::MultiProgress;
+use indicatif::{MultiProgress, ProgressBar};
 use log::Record;
 
 use std::ptr::{null_mut};
@@ -57,4 +57,27 @@ pub(crate) fn emit_record(record: &Record<'_>) {
     BACKEND.load(Ordering::Relaxed).as_ref().expect("progress not initialized")
   };
   write.println(line).expect("error writing to log backend")
+}
+
+/// Register a progress bar with the logger. 
+/// 
+/// This is used for code that constructs the progress bar itself; it adds it to HappyLog's
+/// multi-progress so output can be coordinated with the logger.
+pub fn add_progress(pb: ProgressBar) {
+  let mp = ensure_mp();
+  mp.add(pb.clone());
+}
+
+/// Create a new progress bar.
+pub fn new_progress(len: u64) -> ProgressBar {
+  let pb = ProgressBar::new(len);
+  add_progress(pb.clone());
+  pb
+}
+
+/// Create a new spinner bar.
+pub fn new_spinner() -> ProgressBar {
+  let pb = ProgressBar::new_spinner();
+  add_progress(pb.clone());
+  pb
 }
