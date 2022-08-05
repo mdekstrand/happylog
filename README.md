@@ -24,6 +24,10 @@ fn main() -> () {
 In 0.3, Happylog changed to use Fern instead of its own log target.  It will
 eventually expose Fern dispatchers to allow for more thorough log configuration.
 
+It also no longer requires log guard objects; it maintains an internal `MultiProgress`
+and allows progress bars to be added to them.  Code using happylog should usually not
+use `MultiProgress` directly.
+
 ## Acknowledgements
 
 Copyright &copy; 2020–2022 Boise State University.  Distributed under the MIT
