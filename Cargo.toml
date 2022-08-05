@@ -1,12 +1,12 @@
 [package]
 name = "happylog"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Michael Ekstrand <michaelekstrand@boisestate.edu>"]
 homepage = "https://github.com/mdekstrand/happylog"
 repository = "https://github.com/mdekstrand/happylog.git"
 keywords = ["logging", "console"]
 categories = ["command-line-interface"]
-edition = "2018"
+edition = "2021"
 license = "MIT"
 readme = "README.md"
 description = "Simple logging backend for command-line utilities"
@@ -16,7 +16,7 @@ default = ["structopt"]
 
 [dependencies]
 log = { version = "^0.4.8", features = ["std"] }
-indicatif = ">=0.17.0-rc.11"
+indicatif = "^0.17.0"
 console = ">=0.9"
 
 structopt = { version = ">= 0.2", optional = true }
