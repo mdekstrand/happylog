@@ -18,5 +18,6 @@ default = ["structopt"]
 log = { version = "^0.4.8", features = ["std"] }
 indicatif = "^0.17.0"
 console = ">=0.9"
+fern = "^0.6.1"
 
 structopt = { version = ">= 0.2", optional = true }

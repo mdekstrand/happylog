@@ -23,10 +23,10 @@ the logging framework.
 "#)]
 #[derive(StructOpt, Debug)]
 pub struct LogOpts {
-  /// Verbose mode (-v, -vv, -vvv, etc.)
+  /// Increases logging verbosity mode (-v, -vv, -vvv, etc.)
   #[structopt(short="v", long="verbose", parse(from_occurrences))]
   verbose: usize,
-  /// Silence output
+  /// Silences informational output
   #[structopt(short="q", long="quiet")]
   quiet: bool
 }
@@ -41,6 +41,6 @@ impl LogOpts {
     for _i in 0..self.verbose {
       level = verbosify(level);
     }
-    crate::console_emitter::initialize(level)
+    crate::progress::initialize(level)
   }
 }
