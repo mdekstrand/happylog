@@ -1,7 +1,11 @@
 //! Support for configuring logging verbosity levels.
+//! 
+//! This isn't yet exposed. Eventually it will allow extensive verbosity
+//! customization.
 
-use std::borrow::Cow;
+use std::{borrow::Cow, cmp::min};
 
+use fern::Dispatch;
 use log::LevelFilter;
 
 static DEFAULT_SEQUENCE: &[LevelFilter] = &[
@@ -35,5 +39,26 @@ impl Default for Verbosity {
       levels: DEFAULT_SEQUENCE.iter().map(|f| f.into()).collect(),
       current: 1,
     }
+  }
+}
+
+impl Verbosity {
+  fn level(&self) -> &VerbosityLevel {
+    let idx = min(self.current, self.levels.len() - 1);
+    &self.levels[idx]
+  }
+
+  pub fn add_filters(&self, dispatch: Dispatch) -> Dispatch {
+    let lvl = self.level();
+    let mut dispatch = dispatch.level(lvl.default);
+    for (m, l) in lvl.modules.iter() {
+      dispatch = dispatch.level_for(m.clone(), l.clone());
+    }
+    dispatch
+  }
+
+  pub fn verbosity(&mut self, verbose: i32) {
+    assert!(verbose >= -1);
+    self.current = (1 + verbose) as usize;
   }
 }

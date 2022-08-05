@@ -12,7 +12,8 @@ readme = "README.md"
 description = "Simple logging backend for command-line utilities"
 
 [features]
-default = ["structopt"]
+default = ["structopt", "colored"]
+colored = ["fern/colored"]
 
 [dependencies]
 log = { version = "^0.4.8", features = ["std"] }

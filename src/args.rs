@@ -1,7 +1,7 @@
 //! Support for command-line argument configuration of the logger.
 use structopt::StructOpt;
-use log::{SetLoggerError, LevelFilter};
-use crate::util::verbosify;
+use log::{SetLoggerError};
+use crate::{verbosity::Verbosity, init_from_verbosity};
 
 #[cfg_attr(not(doc), allow(missing_docs))]
 #[cfg_attr(doc, doc=r#"
@@ -25,7 +25,7 @@ the logging framework.
 pub struct LogOpts {
   /// Increases logging verbosity mode (-v, -vv, -vvv, etc.)
   #[structopt(short="v", long="verbose", parse(from_occurrences))]
-  verbose: usize,
+  verbose: i32,
   /// Silences informational output
   #[structopt(short="q", long="quiet")]
   quiet: bool
@@ -34,13 +34,13 @@ pub struct LogOpts {
 impl LogOpts {
   /// Initialize logging
   pub fn init(&self) -> Result<(), SetLoggerError> {
-    let mut level = LevelFilter::Info;
+    let mut verb = Verbosity::default();
     if self.quiet {
-      level = LevelFilter::Off;
+      verb.verbosity(-1);
+    } else {
+      verb.verbosity(self.verbose);
     }
-    for _i in 0..self.verbose {
-      level = verbosify(level);
-    }
-    crate::progress::initialize(level)
+
+    init_from_verbosity(verb)
   }
 }

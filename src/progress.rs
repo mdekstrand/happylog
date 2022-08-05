@@ -19,6 +19,7 @@ pub(crate) fn initialize(pb: MultiProgress) {
 }
 
 /// Get a MultiProgress, making sure we have one.
+#[allow(dead_code)]
 fn ensure_mp() -> MultiProgress {
   unsafe {
     // load one if we have one
@@ -27,21 +28,20 @@ fn ensure_mp() -> MultiProgress {
     if mpp.is_null() {
       let boxed = Box::new(MultiProgress::new());
       let ptr = Box::leak(boxed);
-      let prev = unsafe {
-        let res = BACKEND.compare_exchange(mpp, ptr, Ordering::Relaxed, Ordering::Relaxed);
-        match res {
-          Ok(_old) => {
-            // we successfully set the progress
-            mpp = ptr;
-          },
-          Err(_) => {
-            // we did not - someone beat us to a progress
-            // so we can load it! (we never clear progress)
-            let _ = Box::from(ptr);  // to drop the unused fresh multi-progress
-            mpp = BACKEND.load(Ordering::Relaxed);
-          }
+        
+      let res = BACKEND.compare_exchange(mpp, ptr, Ordering::Relaxed, Ordering::Relaxed);
+      match res {
+        Ok(_old) => {
+          // we successfully set the progress
+          mpp = ptr;
+        },
+        Err(_) => {
+          // we did not - someone beat us to a progress
+          // so we can load it! (we never clear progress)
+          let _ = Box::from(ptr);  // to drop the unused fresh multi-progress
+          mpp = BACKEND.load(Ordering::Relaxed);
         }
-      };
+      }
     }
     // now the MP pointer is not null, by one of 3 means:
     // - it was non-null initially
