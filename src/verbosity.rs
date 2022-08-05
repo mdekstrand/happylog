@@ -61,4 +61,18 @@ impl Verbosity {
     assert!(verbose >= -1);
     self.current = (1 + verbose) as usize;
   }
+
+  pub fn is_quiet(&self) -> bool {
+    return self.current == 0;
+  }
+
+  #[allow(dead_code)]
+  pub fn is_normal(&self) -> bool {
+    return self.current == 1;
+  }
+
+  #[allow(dead_code)]
+  pub fn is_verbose(&self) -> bool {
+    return self.current > 1;
+  }
 }

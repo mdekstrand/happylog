@@ -3,6 +3,7 @@ use std::io::stderr;
 
 use fern::{Dispatch, Output};
 use indicatif::MultiProgress;
+use indicatif::ProgressDrawTarget;
 use log::SetLoggerError;
 use verbosity::Verbosity;
 mod progress;
@@ -27,7 +28,11 @@ pub fn initialize(verbose: i32) -> Result<(), SetLoggerError> {
 }
 
 fn init_from_verbosity(verbose: Verbosity) -> Result<(), SetLoggerError> {
-  let mp = MultiProgress::new();
+  let mp = if verbose.is_quiet() {
+    MultiProgress::with_draw_target(ProgressDrawTarget::hidden())
+  } else {
+    MultiProgress::with_draw_target(ProgressDrawTarget::stderr())
+  };
   progress::initialize(mp.clone());
   let setup = Dispatch::new();
   let setup = verbose.add_filters(setup);
