@@ -17,6 +17,8 @@ pub mod args;
 #[cfg(feature="structopt")]
 pub use args::LogOpts;
 
+pub use fern;
+pub use indicatif;
 pub use progress::add_progress;
 pub use progress::new_progress;
 pub use progress::new_spinner;
