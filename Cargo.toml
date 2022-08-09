@@ -1,6 +1,6 @@
 [package]
 name = "happylog"
-version = "0.3.0"
+version = "0.3.0-b1"
 authors = ["Michael Ekstrand <michaelekstrand@boisestate.edu>"]
 homepage = "https://github.com/mdekstrand/happylog"
 repository = "https://github.com/mdekstrand/happylog.git"
