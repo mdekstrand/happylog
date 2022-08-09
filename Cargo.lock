@@ -93,9 +93,8 @@ dependencies = [
 
 [[package]]
 name = "happylog"
-version = "0.3.0"
+version = "0.3.0-b1"
 dependencies = [
- "console",
  "fern",
  "indicatif",
  "log",
