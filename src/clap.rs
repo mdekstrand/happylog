@@ -1,5 +1,5 @@
 //! Support for command-line argument configuration of the logger.
-use clap::Parser;
+use clap::Args;
 use log::{SetLoggerError};
 use crate::{verbosity::Verbosity, init_from_verbosity};
 
@@ -23,7 +23,7 @@ struct Command {
 In your `main`, you can then call `opts.logging.init()` to initialize 
 the logging framework.
 "#)]
-#[derive(Parser, Debug)]
+#[derive(Args, Debug)]
 pub struct LogOpts {
   /// Increases logging verbosity mode (-v, -vv, -vvv, etc.)
   #[arg(short='v', long="verbose", action=clap::ArgAction::Count)]
