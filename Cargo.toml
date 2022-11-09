@@ -12,7 +12,7 @@ readme = "README.md"
 description = "Simple logging backend for command-line utilities"
 
 [features]
-default = ["structopt", "colored"]
+default = ["colored"]
 colored = ["fern/colored"]
 
 [dependencies]
@@ -21,3 +21,4 @@ indicatif = "^0.17.0"
 fern = "^0.6.1"
 
 structopt = { version = ">= 0.2", optional = true }
+clap = { version = "^4.0", optional = true }
