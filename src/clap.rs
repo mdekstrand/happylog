@@ -10,10 +10,12 @@ Command line options for configuring the logger with StructOpt.
 It's recommended to use this in your program like this:
 
 ```
-#[derive(Clap, Debug)]
+use clap::Parser;
+use happylog::clap::LogOpts;
+#[derive(Parser, Debug)]
 #[command(name="command")]
 struct Command {
-  #[arg(flatten)]
+  #[command(flatten)]
   logging: LogOpts
 }
 ```
@@ -24,10 +26,10 @@ the logging framework.
 #[derive(Parser, Debug)]
 pub struct LogOpts {
   /// Increases logging verbosity mode (-v, -vv, -vvv, etc.)
-  #[arg(short="v", long="verbose", parse(from_occurrences))]
+  #[arg(short='v', long="verbose", action=clap::ArgAction::Count)]
   verbose: i32,
   /// Silences informational output
-  #[arg(short="q", long="quiet")]
+  #[arg(short='q', long="quiet", conflicts_with="verbose")]
   quiet: bool
 }
 

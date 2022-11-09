@@ -13,18 +13,10 @@ mod format;
 mod verbosity;
 
 #[cfg(feature="structopt")]
-#[path = "structopt_args.rs"]
 pub mod structopt;
 
-#[cfg(feature="structopt")]
-pub use structopt::LogOpts;
-
 #[cfg(feature="clap")]
-#[path = "clap_args.rs"]
 pub mod clap;
-
-#[cfg(feature="clap")]
-pub use clap::LogOpts;
 
 pub use fern;
 pub use indicatif;

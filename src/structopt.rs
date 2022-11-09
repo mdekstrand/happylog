@@ -10,6 +10,9 @@ Command line options for configuring the logger with StructOpt.
 It's recommended to use this in your program like this:
 
 ```
+use structopt::StructOpt;
+use happylog::structopt::LogOpts;
+
 #[derive(StructOpt, Debug)]
 #[structopt(name="command")]
 struct Command {
