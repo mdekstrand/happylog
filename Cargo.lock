@@ -129,7 +129,7 @@ dependencies = [
 
 [[package]]
 name = "happylog"
-version = "0.3.0-b3"
+version = "0.3.0-b4"
 dependencies = [
  "clap 4.0.22",
  "fern",
