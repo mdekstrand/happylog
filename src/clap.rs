@@ -43,7 +43,7 @@ impl LogOpts {
         if self.quiet {
             verb.verbosity(-1);
         } else {
-            verb.verbosity(self.verbose);
+            verb.verbosity(self.verbose.into());
         }
 
         init_from_verbosity(verb)
