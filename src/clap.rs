@@ -30,7 +30,7 @@ the logging framework.
 pub struct LogOpts {
     /// Increases logging verbosity mode (-v, -vv, -vvv, etc.)
     #[arg(short='v', long="verbose", action=clap::ArgAction::Count)]
-    verbose: i32,
+    verbose: u8,
     /// Silences informational output
     #[arg(short = 'q', long = "quiet", conflicts_with = "verbose")]
     quiet: bool,
