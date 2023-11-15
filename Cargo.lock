@@ -221,7 +221,7 @@ dependencies = [
 
 [[package]]
 name = "happylog"
-version = "0.3.0-b5"
+version = "0.3.0-b6"
 dependencies = [
  "clap 4.4.6",
  "fern",
