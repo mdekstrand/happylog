@@ -1,7 +1,10 @@
 //! Support for command-line argument configuration of the logger.
-use crate::{init_from_verbosity, verbosity::Verbosity};
+use std::env;
+
 use clap::Args;
-use log::SetLoggerError;
+use log::*;
+
+use crate::{init_from_verbosity, verbosity::Verbosity};
 
 #[cfg_attr(not(doc), allow(missing_docs))]
 #[cfg_attr(
@@ -40,12 +43,26 @@ impl LogOpts {
     /// Initialize logging
     pub fn init(&self) -> Result<(), SetLoggerError> {
         let mut verb = Verbosity::default();
+        let mut bad_ev = false;
+        if let Some(v) = env::var("LOG_VERBOSE").ok() {
+            if let Some(v) = v.parse().ok() {
+                verb.verbosity(v);
+                return Ok(());
+            } else {
+                bad_ev = true;
+            }
+        }
+
         if self.quiet {
             verb.verbosity(-1);
         } else {
             verb.verbosity(self.verbose.into());
         }
 
-        init_from_verbosity(verb)
+        init_from_verbosity(verb)?;
+        if bad_ev {
+            warn!("LOG_VERBOSE variable not an integer");
+        }
+        Ok(())
     }
 }
