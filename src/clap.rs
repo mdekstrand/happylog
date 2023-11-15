@@ -44,16 +44,17 @@ impl LogOpts {
     pub fn init(&self) -> Result<(), SetLoggerError> {
         let mut verb = Verbosity::default();
         let mut bad_ev = false;
-        if let Some(v) = env::var("LOG_VERBOSE").ok() {
-            if let Some(v) = v.parse().ok() {
-                verb.verbosity(v);
-                return Ok(());
-            } else {
-                bad_ev = true;
-            }
-        }
+        let ev_verb = if let Some(v) = env::var("LOG_VERBOSE").ok() {
+            let vo = v.parse().ok();
+            bad_ev = vo.is_none();
+            vo
+        } else {
+            None
+        };
 
-        if self.quiet {
+        if let Some(v) = ev_verb {
+            verb.verbosity(v)
+        } else if self.quiet {
             verb.verbosity(-1);
         } else {
             verb.verbosity(self.verbose.into());
