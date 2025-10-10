@@ -4,12 +4,12 @@ use log::Record;
 use std::ptr::null_mut;
 use std::sync::atomic::{AtomicPtr, Ordering};
 
-static mut BACKEND: AtomicPtr<MultiProgress> = AtomicPtr::new(null_mut());
+static BACKEND: AtomicPtr<MultiProgress> = AtomicPtr::new(null_mut());
 
 pub(crate) fn initialize(pb: MultiProgress) {
     let pbb = Box::new(pb);
     let pbp = Box::leak(pbb);
-    let prev = unsafe { BACKEND.swap(pbp, Ordering::Relaxed) };
+    let prev = BACKEND.swap(pbp, Ordering::Relaxed);
     if !prev.is_null() {
         // oops, we already initialized!
         panic!("happylog initialized twice");

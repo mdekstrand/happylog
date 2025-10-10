@@ -6,7 +6,7 @@ homepage = "https://github.com/mdekstrand/happylog"
 repository = "https://github.com/mdekstrand/happylog.git"
 keywords = ["logging", "console"]
 categories = ["command-line-interface"]
-edition = "2021"
+edition = "2024"
 license = "MIT"
 readme = "README.md"
 description = "Simple logging backend for command-line utilities"
@@ -17,7 +17,7 @@ colored = ["fern/colored"]
 
 [dependencies]
 log = "^0.4.8"
-indicatif = "^0.17.0"
+indicatif = "^0.18.0"
 fern = "^0.6.1"
 
 structopt = { version = ">= 0.2", optional = true }
